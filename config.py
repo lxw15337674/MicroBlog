@@ -10,5 +10,13 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir,'db_repository')
 OPENID_PROVIDERS = [
     { 'name': 'Yahoo', 'url': 'https://me.yahoo.com' },
     { 'name': 'AOL', 'url': 'http://openid.aol.com/<username>' },
-    { 'name': 'Flickr', 'url': 'http://www.flickr.com/<username>' },
-    { 'name': 'MyOpenID', 'url': 'https://www.myopenid.com' }]
+    { 'name': 'MyOpenID', 'url': 'http://openid.org.cn' }]
+
+# 邮箱服务器设置
+MAIL_SERVER = 'localhost'
+MAIL_PORT = 25
+MAIL_USERNAME = None
+MAIL_PASSWORD = None
+
+# 管理员表
+ADMINS = ['you@example.com']
