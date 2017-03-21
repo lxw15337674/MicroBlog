@@ -22,3 +22,7 @@ MAIL_PASSWORD = None
 ADMINS = ['you@example.com']
 #每页显示的 blog 数
 POSTS_PER_PAGE = 3
+#设置全文搜索数据库的名称
+WHOOSH_BASE = os.path.join(basedir,'search.db')
+#设置搜索结果返回的最大数量
+MAX_SEARCH_RESULTS = 50

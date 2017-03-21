@@ -1,5 +1,5 @@
-from app import db
-
+from app import db, app
+import flask_whooshalchemyplus
 
 # 关注表
 followers = db.Table('followers',
@@ -84,6 +84,9 @@ class User(db.Model):
 
 
 class Post(db.Model):
+    # 设置数据库中的所有能被搜索并且建立索引的字段
+    __searchable__ = ['body']
+
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime)
@@ -91,3 +94,7 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post %r>' % self.body
+
+
+# 通过调用 whoosh_index 函数，初始化了全文搜索索引。
+flask_whooshalchemyplus.whoosh_index(app, Post)
