@@ -20,3 +20,5 @@ MAIL_PASSWORD = None
 
 # 管理员表
 ADMINS = ['you@example.com']
+#每页显示的 blog 数
+POSTS_PER_PAGE = 3

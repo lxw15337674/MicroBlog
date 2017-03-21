@@ -2,29 +2,32 @@ from datetime import datetime
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, oid
-from .models import User
-from .forms import LoginForm, EditForm
+from .models import User,Post
+from .forms import LoginForm, EditForm,PostForm
+from config import POSTS_PER_PAGE
 
-
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
+@app.route('/index/<int:page>',methods=['GET', 'POST'])
 @login_required
-def index():
-    user = g.user
-    posts = [
-        {
-            'author': {'nickname': 'lixiwang'},
-            'body': '星期二'
-        },
-        {
-            'author': {'nickname': 'susan'},
-            'body': '今天白天多云'
-        }
-    ]
+def index(page=1):
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(body=form.post.data, timestamp=datetime.utcnow(), author=g.user)
+        db.session.add(post)
+        db.session.commit()
+        flash("你的消息已发布")
+        return redirect(url_for('index'))
+    # paginate 方法能够被任何查询调用。它接受三个参数:
+    #     页数，从 1 开始，
+    #     每一页的项目数，这里也就是说每一页显示的 blog 数，
+    #     错误标志。如果是 True，当请求的范围页超出范围的话，一个 404 错误将会自动地返回到客户端的网页浏览器。如果是 False，返回一个空列表而不是错误。
+    posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
     return render_template("index.html",
-                           posts=posts,
                            title='Home',
-                           user=user)
+                           form=form,
+                           posts=posts)
+
 
 
 # 登录页面
@@ -45,16 +48,14 @@ def login():
 
 # 用户信息页
 @app.route('/user/<nickname>')
+@app.route('/user/<nickname>/<int:page>')
 @login_required
-def user(nickname):
+def user(nickname, page=1):
     user = User.query.filter_by(nickname=nickname).first()
     if user is None:
         flash("不存在" + nickname + "用户")
         return redirect(url_for('index'))
-    posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
+    posts = user.posts.paginate(page, POSTS_PER_PAGE, False)
     return render_template('user.html',
                            user=user,
                            posts=posts)
@@ -137,7 +138,7 @@ def after_login(resp):
     if resp.email is None or resp.email == "":
         flash('无效的登录,请重试')
         return redirect(url_for('login'))
-    user = User.query.filter_by(email=resp.email).first()
+    user = User.query.filter_by(email = resp.email).first()
     if user is None:
         nickname = resp.nickname
         if nickname is None or nickname == "":

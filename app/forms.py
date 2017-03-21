@@ -3,6 +3,7 @@ from wtforms import StringField, BooleanField, TextAreaField  # 两个字段类
 from wtforms.validators import DataRequired, Length  # DataRequired验证器是检查提交的数据是否为空.
 from app.models import User
 
+
 class LoginForm(FlaskForm):
     openid = StringField('openid', validators=[DataRequired()])
     remember_me = BooleanField('remember_me', default=False)
@@ -26,3 +27,7 @@ class EditForm(FlaskForm):
             self.nickname.errors.append("这个昵称已经被使用,请换其他的昵称")
             return False
         return True
+
+
+class PostForm(FlaskForm):
+    post = StringField('post', validators=[DataRequired()])

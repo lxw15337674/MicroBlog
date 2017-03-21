@@ -1,5 +1,6 @@
 from app import db
 
+
 # 关注表
 followers = db.Table('followers',
                      db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
@@ -74,7 +75,9 @@ class User(db.Model):
 
     def followed_posts(self):
         # join连接,filter过滤,order_by排序
-        return Post.query.join(followers, (followers.c.followed_id == Post.user_id)).filter(followers.c.follower_id == self.id).order_by(Post.timestamp.desc())
+        return Post.query.join(followers, (followers.c.followed_id == Post.user_id)).filter(
+            followers.c.follower_id == self.id).order_by(Post.timestamp.desc())
+
     # 打印
     def __repr__(self):
         return '<User %r>' % self.nickname
@@ -83,7 +86,7 @@ class User(db.Model):
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
-    timestamp = db.Column(db.DATETIME)
+    timestamp = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
