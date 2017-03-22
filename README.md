@@ -1,14 +1,16 @@
-flask搭建的简易博客
+###  flask��ļ��ײ���
+
+paginate ����
 =========
-paginate 方法
-=========
-	能够被任何查询调用。它接受三个参数:
-		页数，从 1 开始，
-		每一页的项目数，这里也就是说每一页显示的 blog 数，
-		错误标志。如果是 True，当请求的范围页超出范围的话，一个 404 错误将会自动地返回到客户端的网页浏览器。如果是 False，返回一个空列表而不是错误。
-	从 paginate 返回的值是一个 Pagination 对象。这个对象的 items 成员包含了请求页面项目(本文是指 blog)的列表。在 Pagination 对象中还有其它有帮助的东西，我们将在后面能看到。
-	paginate成员:
-		has_next：如果在目前页后至少还有一页的话，返回 True
-		has_prev：如果在目前页之前至少还有一页的话，返回 True
-		next_num：下一页的页面数
-		prev_num：前一页的页面数
+	�ܹ����κβ�ѯ���á���������������:
+		ҳ������ 1 ��ʼ��
+		ÿһҳ����Ŀ��������Ҳ����˵ÿһҳ��ʾ�� blog ����
+		�����־������� True��������ķ�Χҳ������Χ�Ļ���һ�� 404 ���󽫻��Զ��ط��ص��ͻ��˵���ҳ������������ False������һ�����б������Ǵ���
+	�� paginate ���ص�ֵ��һ�� Pagination ������������ items ��Ա����������ҳ����Ŀ(������ָ blog)���б����� Pagination �����л��������а����Ķ��������ǽ��ں����ܿ�����
+	paginate��Ա:
+		has_next�������Ŀǰҳ�����ٻ���һҳ�Ļ������� True
+		has_prev�������Ŀǰҳ֮ǰ���ٻ���һҳ�Ļ������� True
+		next_num����һҳ��ҳ����
+		prev_num��ǰһҳ��ҳ����
+
+
