@@ -41,3 +41,7 @@ if not app.debug:
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
     app.logger.info('microblog startup')
+
+#邮件
+from flask_mail import Mail
+mail = Mail(app)
