@@ -4,8 +4,8 @@ from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, oid
 from .models import User, Post
 from .forms import LoginForm, SearchForm, EditForm, PostForm
-from config import POSTS_PER_PAGE,MAX_SEARCH_RESULTS
-
+from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
+from .emails import follower_notification
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -80,6 +80,7 @@ def follow(nickname):
     db.session.add(u)
     db.session.commit()
     flash('You are now following ' + nickname + '!')
+    follower_notification(user, g.user)
     return redirect(url_for('user', nickname=nickname))
 
 
@@ -130,7 +131,7 @@ def logout():
 
 
 # 搜索
-@app.route('/search,', methods = ['POST'])
+@app.route('/search,', methods=['POST'])
 @login_required
 def search():
     if not g.search_form.validate_on_submit():
@@ -177,6 +178,7 @@ def before_request():
         db.session.commit()
         g.search_form = SearchForm()
 
+
 @app.route('/search_results/<query>')
 @login_required
 def search_results(query):
@@ -184,6 +186,7 @@ def search_results(query):
     return render_template('search_results.html',
                            query=query,
                            results=results)
+
 
 # 处理错误
 @app.errorhandler(404)

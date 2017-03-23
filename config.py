@@ -13,15 +13,16 @@ OPENID_PROVIDERS = [
     { 'name': 'MyOpenID', 'url': 'http://openid.org.cn' }]
 
 # 邮箱服务器设置
-MAIL_SERVER='smtp.qq.com'
+MAIL_SERVER = 'smtp.qq.com'
 MAIL_PORT = 465
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
-MAIL_USERNAME = os.environ.get('404174262')
-MAIL_PASSWORD = os.environ.get('crccvlkczwzgcbdh')
+MAIL_USERNAME = '404174262'
+MAIL_PASSWORD = 'dhppoizdccvabidf'
 
 # 管理员表
-ADMINS = ['you@example.com']
+ADMINS = ['404174262@qq.com']
+
 #每页显示的 blog 数
 POSTS_PER_PAGE = 3
 #设置全文搜索数据库的名称

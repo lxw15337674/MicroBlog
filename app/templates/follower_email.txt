@@ -1,0 +1,9 @@
+你好,{{user.nickname}}
+
+{{follower.nickname}} 现在关注你了. 点击这个链接查看他的{{follower.nickname}}个人主页:
+
+{{url_for("user", nickname = follower.nickname, _external = True)}}
+
+Bhwa233,
+
+microblog 管理员
