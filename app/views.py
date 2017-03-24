@@ -6,6 +6,8 @@ from .models import User, Post
 from .forms import LoginForm, SearchForm, EditForm, PostForm
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
 from .emails import follower_notification
+from flask_bootstrap import Bootstrap
+
 
 
 @app.route('/', methods=['GET', 'POST'])

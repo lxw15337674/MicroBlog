@@ -23,8 +23,8 @@ def send_email(subject, sender, recipients, text_body, html_body):
 def follower_notification(followed, follower):
     send_email("[microblog]%s 现在关注你了" % follower.nickname,
                ADMINS[0],
-               # [followed.email],
-               ['404174262@qq.com'],
+               [followed.email],
+               # ['404174262@qq.com'],
                render_template("follower_email.txt",
                                user=followed, follower=follower),
                render_template("follower_email.html",
