@@ -25,11 +25,19 @@
         {% for post in posts.items %}
             {% include 'post.html' %}
         {% endfor %}
-        {% if posts.has_prev %}<a href="{{ url_for('index', page = posts.prev_num) }}">前一页</a>{% else %}第一页{% endif %} |
-        {% if posts.has_next %}<a href="{{ url_for('index', page = posts.next_num) }}">后一页</a>{% else %}后一页{% endif %}
-
+        <ul class="pagination">
+            {% if posts.has_prev %}
+                <li class="previous"><a href="{{ url_for('index', page = posts.prev_num) }}">&larr;前一页</a></li>
+            {% else %}
+                <li class="previous disabled"><a href="#">&larr; 前一页</a></li>
+            {% endif %}
+            {% if posts.has_next %}
+                <li class="next"><a href="{{ url_for('index', page = posts.next_num) }}">后一页 &rarr;</a></li>
+            {% else %}
+                <li class="next disabled"><a href="#">&larr; 后一页</a></li>
+            {% endif %}
+        </ul>
     {% else %}
         <p><b>这里空无一片</b></p>
     {% endif %}
-
 {% endblock %}

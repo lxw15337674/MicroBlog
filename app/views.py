@@ -6,7 +6,7 @@ from .models import User, Post
 from .forms import LoginForm, SearchForm, EditForm, PostForm
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
 from .emails import follower_notification
-from flask_bootstrap import Bootstrap
+
 
 
 
@@ -31,6 +31,7 @@ def index(page=1):
                            title='Home',
                            form=form,
                            posts=posts)
+
 
 
 # 登录页面
@@ -140,6 +141,10 @@ def search():
         return redirect(url_for('index'))
     return redirect(url_for('search_results', query=g.search_form.search.data))
 
+# 测速bootstrap
+@app.route('/test')
+def test():
+    return render_template('test.html')
 
 @lm.user_loader
 def load_user(id):
