@@ -1,30 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <table>
-        <tr valign="top">
-            <td><img src="{{ user.avatar() }}" style="width:30px;height:30px"></td>
-            <td>
-                <h1>User:{{ user.nickname }}</h1>
-                {% if user.about_me %}<p>{{ user.about_me }}</p>{% else %}<p>这个人很懒,什么都没留下</p>{% endif %}
-                {% if user.last_seen %}<p><i>最后一次登录: {{ user.last_seen }}</i></p>{% endif %}
-                <p>{{ user.followers.count() }}关注者|
-                    {% if user.id == g.user.id %}
-                        <a href="{{ url_for('edit') }}">编辑你的信息</a>
-                    {% elif not g.user.is_following(user) %}
-                        <a href="{{ url_for('follow', nickname = user.nickname) }}">Follow</a>
-                    {% else %}
-                        <a href="{{ url_for('unfollow', nickname = user.nickname) }}">Unfollow</a>
-                    {% endif %}
-                </p>
-            </td>
-        </tr>
-    </table>
+    {% include 'flash.html' %}
+    <div class="well" style="">
+        <table>
+            <tr valign="top">
+                {#                <td><img src="{{ user.avatar() }}"></td>#}
+                <td>
+                    <img src="{{ user.avatar() }}"><font size="6px"> {{ user.nickname }}</font>
+                    {% if user.about_me %}<p>{{ user.about_me }}</p>{% else %}<p>这个人很懒,什么都没留下</p>{% endif %}
+                    {% if user.last_seen %}<p><i>最后一次登录: {{ user.last_seen }}</i></p>{% endif %}
+                    <p>
+                        <a href="#" class="btn btn-default btn-lg disabled" role="button"><strong>{{ user.followers.count() }} 关注</strong></a>
+                        {% if user.id == g.user.id %}
+                            <a href="{{ url_for('edit') }}" class="btn btn-primary btn-lg" role="button">编辑你的资料</a>
+                        {% elif not g.user.is_following(user) %}
+                            <a href="{{ url_for('follow', nickname = user.nickname) }}" class="btn btn-primary btn-lg" role="button">关注</a>
+                        {% else %}
+                            <a href="{{ url_for('unfollow', nickname = user.nickname) }}" class="btn btn-primary btn-lg" role="button">取消关注</a>
+                        {% endif %}
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
     <hr>
     {% for post in posts.items %}
         {% include 'post.html' %}
     {% endfor %}
-{% if posts.has_prev %}<a href="{{ url_for('user', nickname = user.nickname, page = posts.prev_num) }}">前一页</a>{% else %}前一页{% endif %} |
-{% if posts.has_next %}<a href="{{ url_for('user', nickname = user.nickname, page = posts.next_num) }}">后一页</a>{% else %}后一页 {% endif %}
+    {% if posts.has_prev %}<a href="{{ url_for('user', nickname = user.nickname, page = posts.prev_num) }}">前一页</a>
+    {% else %}前一页{% endif %} |
+    {% if posts.has_next %}<a href="{{ url_for('user', nickname = user.nickname, page = posts.next_num) }}">后一页</a>
+    {% else %}后一页 {% endif %}
 
 {% endblock %}

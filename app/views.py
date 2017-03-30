@@ -71,18 +71,15 @@ def user(nickname, page=1):
 def follow(nickname):
     user = User.query.filter_by(nickname=nickname).first()
     if user is None:
-        flash('User %s not found.' % nickname)
+        flash('用户 %s 没有找到.' % nickname)
         return redirect(url_for('index'))
-    if user == g.user:
-        flash('You can\'t follow yourself!')
-        return redirect(url_for('user', nickname=nickname))
     u = g.user.follow(user)
     if u is None:
-        flash('Cannot follow ' + nickname + '.')
+        flash('不能关注' + nickname + '.')
         return redirect(url_for('user', nickname=nickname))
     db.session.add(u)
     db.session.commit()
-    flash('You are now following ' + nickname + '!')
+    flash('成功关注' + nickname + '!')
     follower_notification(user, g.user)
     return redirect(url_for('user', nickname=nickname))
 
@@ -93,18 +90,15 @@ def follow(nickname):
 def unfollow(nickname):
     user = User.query.filter_by(nickname=nickname).first()
     if user is None:
-        flash('User %s not found.' % nickname)
+        flash('用户 %s 没有找到.' % nickname)
         return redirect(url_for('index'))
-    if user == g.user:
-        flash('You can\'t unfollow yourself!')
-        return redirect(url_for('user', nickname=nickname))
     u = g.user.unfollow(user)
     if u is None:
-        flash('Cannot unfollow ' + nickname + '.')
+        flash('不能取消关注 ' + nickname + '.')
         return redirect(url_for('user', nickname=nickname))
     db.session.add(u)
     db.session.commit()
-    flash('You have stopped following ' + nickname + '.')
+    flash('已经取消关注' + nickname + '.')
     return redirect(url_for('user', nickname=nickname))
 
 

@@ -1,26 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ g.user.nickname }}!</h1>
-    <form action="" method="post" name="post">
-        {{ form.hidden_tag() }}
-        <table>
-            <tr>
-                <td>说些什么:</td>
-                <td>{{ form.post(size=30,maxlength=140) }}</td>
-                <td>
-                    {% for error in form.errors.post %}
-                        <span style="color:red;">[{{ error }}</span><br>
+    <div class="well">
+        {% include 'flash.html' %}
+        <h1>Hi, {{ g.user.nickname }}!</h1>
+        <form class="form-horizontal" action="" method="post" name="post">
+            {{ form.hidden_tag() }}
+            <td>
+                <div class="control-group{% if form.errors.post %} error{% endif %}">
+                    <p>
+                    <div class="controls">
+                        {{ form.post(size = 40, maxlength = 140,placeholder="说点什么吧...") }}
+                    </div>
+                    </p>
+                    <p>{% for error in form.errors.post %}
+                        <div class="alert alert-danger" role="alert">
+                            <b>错误:</b> {{ error }}
+                        </div>
                     {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type="submit" value="发布!"></td>
-                <td></td>
-            </tr>
-        </table>
+                </div>
+                </p>
+                <p><input class="btn btn-primary btn-sm" type="submit" value="发布!"></p>
+    </div>
+    </td>
     </form>
+
+    </div>
     {% if posts != None %}
         {% for post in posts.items %}
             {% include 'post.html' %}
@@ -34,10 +39,11 @@
             {% if posts.has_next %}
                 <li class="next"><a href="{{ url_for('index', page = posts.next_num) }}">后一页 &rarr;</a></li>
             {% else %}
-                <li class="next disabled"><a href="#">&larr; 后一页</a></li>
+                <li class="next disabled"><a href="#"> 后一页 &rarr;</a></li>
             {% endif %}
         </ul>
     {% else %}
         <p><b>这里空无一片</b></p>
     {% endif %}
+
 {% endblock %}
