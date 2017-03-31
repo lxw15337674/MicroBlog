@@ -30,7 +30,7 @@ class EditForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
-    post = StringField('post', validators=[DataRequired(message="发布的微博不能为空")])
+    post = TextAreaField('post', validators=[DataRequired(message="发布的微博不能为空")])
 
 class SearchForm(FlaskForm):
     search = StringField('search', validators=[DataRequired()])

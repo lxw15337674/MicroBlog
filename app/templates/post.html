@@ -1,9 +1,12 @@
-<table class="table table-hover">
-    <tr>
+<div style=" color:black">
+<table class="table table-bordered" style="width: auto">
+    <tr class="active" >
         <td width="70px"><a href="{{url_for('user', nickname = post.author.nickname)}}"><img src="{{post.author.avatar()}}" /></a></td>
         <td>
-            <p><a href="{{url_for('user', nickname = post.author.nickname)}}">{{post.author.nickname}}</a>   {{post.timestamp}}:</p>
+            <p><a href="{{url_for('user', nickname = post.author.nickname)}}">{{post.author.nickname}}</a>  发布于{{post.timestamp}}:</p>
             <p><strong>{{post.body}}</strong></p>
         </td>
-    </tr>
+     </tr>
+
 </table>
+    </div>

@@ -1,12 +1,13 @@
 {% extends "bootstrap/base.html" %}
-
-{% block title %}
+<html>
+<head>
     {% if title %}
         <title>{{ title }}</title>
     {% else %}
         <title>microblog</title>
     {% endif %}
-{% endblock %}
+</head>
+
 {% block navbar %}
 
     <nav class="navbar navbar-default" role="navigation">
@@ -32,10 +33,10 @@
                             {{ g.search_form.hidden_tag() }}
                             <div class="form-group">
                                 {{ g.search_form.search(type="text",class="form-control",placeholder="搜索") }}
-                            <button type="submit" class="btn btn-default" value="Search"><span
-                                    class="glyphicon glyphicon-search"></span>
-                            </button>
-                                </div>
+                                <button type="submit" class="btn btn-default" value="Search"><span
+                                        class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </div>
                         </form>
                     {% endif %}
                     </li>
@@ -44,5 +45,9 @@
         </div>
     </nav>
 {% endblock %}
+
 {% block content %}
+
 {% endblock %}
+
+</html>

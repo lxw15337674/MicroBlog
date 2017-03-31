@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <div style="width: auto;margin:auto 80px;color: #3777c8;"  >
     <div class="well">
         {% include 'flash.html' %}
         <h1>Hi, {{ g.user.nickname }}!</h1>
         <form class="form-horizontal" action="" method="post" name="post">
+
             {{ form.hidden_tag() }}
             <td>
                 <div class="control-group{% if form.errors.post %} error{% endif %}">
                     <p>
-                    <div class="controls">
-                        {{ form.post(size = 40, maxlength = 140,placeholder="说点什么吧...") }}
-                    </div>
+                        {{ form.post(cols = 64, rows = 4,  style="resize:none",placeholder="说点什么吧...") }}
                     </p>
                     <p>{% for error in form.errors.post %}
                         <div class="alert alert-danger" role="alert">
@@ -21,11 +21,14 @@
                 </div>
                 </p>
                 <p><input class="btn btn-primary btn-sm" type="submit" value="发布!"></p>
-    </div>
-    </td>
-    </form>
+            </td>
+            </td>
+
+
+        </form>
 
     </div>
+
     {% if posts != None %}
         {% for post in posts.items %}
             {% include 'post.html' %}
@@ -45,5 +48,8 @@
     {% else %}
         <p><b>这里空无一片</b></p>
     {% endif %}
+
+      </div>
+
 
 {% endblock %}
