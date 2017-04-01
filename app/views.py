@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, oid
 from .models import User, Post
-from .forms import LoginForm, SearchForm, EditForm, PostForm
+from .forms import LoginForm1, LoginForm2, SearchForm, EditForm, PostForm, registerForm
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
 from .emails import follower_notification
 
@@ -37,14 +37,55 @@ def index(page=1):
 def login():
     if g.user is not None and g.user.is_authenticated:
         return redirect(url_for('index'))
-    form = LoginForm()
+    form1 = LoginForm1()
+    form2 = LoginForm2()
+    if form1.validate_on_submit():
+        session['remember_me'] = form1.remember_me.data
+        return oid.try_login(form1.openid.data, ask_for=['nickname', 'email'])
+    if form2.validate_on_submit():
+        session['remember_me'] = form2.remember_me.data
+        email = form2.email.data
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            flash('该用户不存在')
+        elif user.password != form2.password.data:
+            flash('密码错误')
+        else:
+            login_user(user)
+            return redirect(url_for("/index"), flash("登陆成功"))
+    return render_template('login.html',
+                           title='Sign In',
+                           form1=form1,
+                           form2=form2,
+                           providers=app.config['OPENID_PROVIDERS'])  # 注册页面
+
+# 注册页面
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = registerForm()
     if form.validate_on_submit():
-        session['remember_me'] = form.remember_me.data
-        return oid.try_login(form.openid.data, ask_for=['nickname', 'email'])
-    return render_template("login.html",
-                           title="登录",
-                           form=form,
-                           providers=app.config['OPENID_PROVIDERS'])
+        user = User(
+            email=form.email.data,
+            password=form.password.data,
+            nickname=form.nickname.data,
+            confirmed=True  # 这里默认验证,因为还没做邮箱认证系统
+        )
+        nickname = User.query.filter_by(nickname=user.nickname).first()
+        if nickname is not None:
+            flash("已存在的昵称,请更换其他的昵称")
+            return redirect(url_for('register'))
+        email = User.query.filter_by(nickname=user.email).first()
+        if email is not None:
+            flash("已注册的邮箱,请更换其他的邮箱")
+            return redirect(url_for('register'))
+        db.session.add(user)
+        db.session.commit()
+        flash('注册成功.')
+        return redirect(url_for('register'))
+    else:
+        # form.email.data = g.user.email
+        # form.nickname.data = g.user.nickname
+        return render_template('register.html', form=form)
 
 
 # 用户信息页
@@ -155,9 +196,8 @@ def after_login(resp):
         if nickname is None or nickname == "":
             nickname = resp.email.split('@')[0]
         nickname = User.make_unique_nickname(nickname)
-        user = User(nickname=nickname, email=resp.email)
+        user = User(nickname=nickname, email=resp.email, confirmed=True, password=nickname)
         db.session.add(user)
-        db.session.commit()
         # make the user follow him/herself
         db.session.add(user.follow(user))
         db.session.commit()

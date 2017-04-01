@@ -1,39 +1,111 @@
 {% extends "base.html" %}
 {% block content %}
-        <div style="width: auto;margin:auto 80px;color: #3777c8;"  >
+    <div style="width: auto;margin:auto 80px;color: #3777c8;">
 
-    <div class="well">
+        <div class="well">
 
-    <script type="text/javascript">
-        function set_openid(openid, pr) {
-            u = openid.search('<username>')
-            if (u != -1) {
-                // openid requires username
-                user = prompt('Enter your ' + pr + ' username:')
-                openid = openid.substr(0, u) + user
-            }
-            form = document.forms['login'];
-            form.elements['openid'].value = openid
-        }
-    </script>
-    {% include 'flash.html' %}
-    <h1>登录</h1>
-    <form action="" method="post" name="login">
-        {{ form.hidden_tag() }}{#form.hidden_tag()模板参数将被替换为一个隐藏字段，用来是实现在配置中激活的 CSRF 保护#}
-        <p>
-            请输入你的openID:<br>
-            {{ form.openid(size=30) }}<br>
-            {% for error in form.openid.errors %}
-                <span style="color:red">[{{ error }}]</span>
-            {% endfor %}<br>
-            |{% for pr in providers %}
-            <a href="javascript:set_openid('{{ pr.url }}', '{{ pr.name }}');">{{ pr.name }}</a> |
-        {% endfor %}
-        </p>
-        <p>{{ form.remember_me }} Remember Me</p>
-        <p><input type="submit" value="Sign in"></p>
+            <script type="text/javascript">
+                function set_openid(openid, pr) {
+                    u = openid.search('<username>')
+                    if (u != -1) {
+                        // openid requires username
+                        user = prompt('Enter your ' + pr + ' username:')
+                        openid = openid.substr(0, u) + user
+                    }
+                    form = document.forms['login'];
+                    form.elements['openid'].value = openid
+                }
+            </script>
+            {% include 'flash.html' %}
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#panel-2" data-toggle="tab"><h5>登录</h5></a></li>
+                    <li class=""><a href="#panel-1" data-toggle="tab"><h5>openid登录</h5></a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane" id="panel-1">
+                        <form class="form-horizontal" method="post" name="login">
+                            {{ form1.hidden_tag() }}{#form.hidden_tag()模板参数将被替换为一个隐藏字段，用来是实现在配置中激活的 CSRF 保护#}
+                            <div class="form-group">
+                                <div class="col-sm-10">
 
-    </form>
-    </div>
+                                </div>
+                            </div>
+                            <div class="form-group  ">
+                                <div class="col-sm-offset-1 col-sm-10">
+
+                                    {% for pr in providers %}
+                                        <a class="input btn btn-default"
+                                           href="javascript:set_openid('{{ pr.url }}', '{{ pr.name }}');">{{ pr.name }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group  col-sm-10 ">
+                                <label class="col-sm-1 control-label">网址</label>
+                                {{ form1.openid(size=30,disabled="disabled") }}<br>
+                                {% for error in form1.openid.errors %}
+                                    <div class="alert alert-info alert-dismissable">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        <strong>{{ error }}</strong>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group ">
+                                <div class="col-sm-offset-1 col-sm-10">
+                                    <label class="checkbox">
+                                        {{ form2.remember_me }} 下次自动登录
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div class="form-group ">
+                                <div class="col-sm-offset-1 col-sm-10">
+                                    <input type="submit" value="登录" class="btn btn-default">
+                                    <a href="{{ url_for('register') }}" class="input btn btn-default">注册</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                    <div class="tab-pane active" id="panel-2">
+
+                        <form class="form-horizontal" method="post" name="login">
+                            {{ form2.hidden_tag() }}
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label">邮箱账号</label>
+                                {{ form2.email(maxlength = 20) }}
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label">密码</label>
+                                {{ form2.password(maxlength = 20) }}
+                            </div>
+                            <div class="form-group ">
+                                <div class="col-sm-offset-1 col-sm-10">
+                                    <label class="checkbox">
+                                        {{ form2.remember_me }} 下次自动登录
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <div class="col-sm-offset-1 col-sm-10">
+                                    <input type="submit" value="登录" class="btn btn-default">
+                                    <a href="{{ url_for('register') }}" class="input btn btn-default">注册</a>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 {% endblock %}

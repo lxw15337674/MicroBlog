@@ -1,55 +1,57 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div style="width: auto;margin:auto 80px;color: #3777c8;"  >
-    <div class="well">
-        {% include 'flash.html' %}
-        <h1>Hi, {{ g.user.nickname }}!</h1>
-        <form class="form-horizontal" action="" method="post" name="post">
+    <div style="width: auto;margin:auto 80px;color: #3777c8;">
+        <div class="well">
+            {% include 'flash.html' %}
+            <h1>Hi, {{ g.user.nickname }}!</h1>
+            <form class="form-horizontal" action="" method="post" name="post">
 
-            {{ form.hidden_tag() }}
-            <td>
-                <div class="control-group{% if form.errors.post %} error{% endif %}">
-                    <p>
-                        {{ form.post(cols = 64, rows = 4,  style="resize:none",placeholder="说点什么吧...") }}
-                    </p>
-                    <p>{% for error in form.errors.post %}
-                        <div class="alert alert-danger" role="alert">
-                            <b>错误:</b> {{ error }}
-                        </div>
-                    {% endfor %}
-                </div>
-                </p>
-                <p><input class="btn btn-primary btn-sm" type="submit" value="发布!"></p>
-            </td>
-            </td>
+                {{ form.hidden_tag() }}
+                <td>
+                    <div class="control-group{% if form.errors.post %} error{% endif %}">
+                        <p>
+                            {{ form.post(cols = 64, rows = 4,  style="resize:none",placeholder="说点什么吧...") }}
+                        </p>
+                        <p>{% for error in form.errors.post %}
+                            <div class="alert alert-danger" role="alert">
+                                <b>错误:</b> {{ error }}
+                            </div>
+                        {% endfor %}
+                        </p>
+                    </div>
 
 
-        </form>
+                    <p><input class="btn btn-primary btn-sm" type="submit" value="发布!"></p>
+                </td>
+                </td>
+
+
+            </form>
+
+        </div>
+
+        {% if posts != None %}
+            {% for post in posts.items %}
+                {% include 'post.html' %}
+            {% endfor %}
+            <ul class="pagination">
+                {% if posts.has_prev %}
+                    <li class="previous"><a href="{{ url_for('index', page = posts.prev_num) }}">&larr;前一页</a></li>
+                {% else %}
+                    <li class="previous disabled"><a href="#">&larr; 前一页</a></li>
+                {% endif %}
+                {% if posts.has_next %}
+                    <li class="next"><a href="{{ url_for('index', page = posts.next_num) }}">后一页 &rarr;</a></li>
+                {% else %}
+                    <li class="next disabled"><a href="#"> 后一页 &rarr;</a></li>
+                {% endif %}
+            </ul>
+        {% else %}
+            <p><b>这里空无一片</b></p>
+        {% endif %}
 
     </div>
-
-    {% if posts != None %}
-        {% for post in posts.items %}
-            {% include 'post.html' %}
-        {% endfor %}
-        <ul class="pagination">
-            {% if posts.has_prev %}
-                <li class="previous"><a href="{{ url_for('index', page = posts.prev_num) }}">&larr;前一页</a></li>
-            {% else %}
-                <li class="previous disabled"><a href="#">&larr; 前一页</a></li>
-            {% endif %}
-            {% if posts.has_next %}
-                <li class="next"><a href="{{ url_for('index', page = posts.next_num) }}">后一页 &rarr;</a></li>
-            {% else %}
-                <li class="next disabled"><a href="#"> 后一页 &rarr;</a></li>
-            {% endif %}
-        </ul>
-    {% else %}
-        <p><b>这里空无一片</b></p>
-    {% endif %}
-
-      </div>
 
 
 {% endblock %}

@@ -9,7 +9,6 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir,'db_repository')
 
 OPENID_PROVIDERS = [
     { 'name': 'Yahoo', 'url': 'https://me.yahoo.com' },
-    { 'name': 'AOL', 'url': 'http://openid.aol.com/<username>' },
     { 'name': 'MyOpenID', 'url': 'http://openid.org.cn' }]
 
 # 邮箱服务器设置
@@ -24,7 +23,7 @@ MAIL_PASSWORD = 'dhppoizdccvabidf'
 ADMINS = ['404174262@qq.com']
 
 #每页显示的 blog 数
-POSTS_PER_PAGE = 3
+POSTS_PER_PAGE = 5
 #设置全文搜索数据库的名称
 WHOOSH_BASE = os.path.join(basedir,'search.db')
 #设置搜索结果返回的最大数量

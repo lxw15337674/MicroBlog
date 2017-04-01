@@ -13,8 +13,20 @@ class User(db.Model):
     nickname = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    password = db.Column(db.String(140),nullable=False)
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime)
+    confirmed = db.Column(db.Boolean,nullable=False,default=False)
+    confirmed_on = db.Column(db.DateTime,nullable=True)
+
+
+    #注册
+    def __init__(self,nickname,password,email,confirmed,confirmed_on=None):
+        self.nickname = nickname
+        self.email = email
+        self.password =password
+        self.confirmed = confirmed
+        self.confirmed_on = confirmed_on
 
     # 设置与followers表的一对多关系
     followed = db.relationship('User',
