@@ -1,9 +1,9 @@
 from .date import date
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
-from app import app, db, lm, oid
+from app import app, db, lm, oid, photos
 from .models import User, Post
-from .forms import LoginForm1, LoginForm2, SearchForm, EditForm, PostForm, registerForm
+from .forms import LoginForm1, LoginForm2, SearchForm, EditForm, PostForm, registerForm, UploadForm
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
 from .emails import follower_notification
 
@@ -58,6 +58,7 @@ def login():
                            form1=form1,
                            form2=form2,
                            providers=app.config['OPENID_PROVIDERS'])  # 注册页面
+
 
 # 注册页面
 @app.route('/register', methods=['GET', 'POST'])
@@ -156,6 +157,24 @@ def edit():
         form.nickname.data = g.user.nickname
         form.about_me.data = g.user.about_me
         return render_template('edit.html', form=form)
+
+
+# 头像上传
+@app.route('/img', methods=['GET', 'POST'])
+@login_required
+def upload_file():
+    form = UploadForm()
+    if form.validate_on_submit():
+        filename = photos.save(form.photo.data, folder='Avatar', name=g.user.nickname + '.')
+        file_url = photos.url(filename)
+        g.user.imgurl = file_url
+        db.session.add(g.user)
+        db.session.commit()
+        flash('修改成功.')
+
+    else:
+        file_url = None
+    return render_template('img.html', form=form, file_url=file_url)
 
 
 # 登出

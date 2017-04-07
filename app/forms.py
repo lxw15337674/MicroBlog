@@ -1,6 +1,9 @@
+from flask_wtf.file import FileAllowed, FileRequired
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, TextAreaField,PasswordField  # 两个字段类
+from wtforms import StringField, BooleanField, TextAreaField,PasswordField, FileField  # 两个字段类
 from wtforms.validators import DataRequired, Length, EqualTo  # DataRequired验证器是检查提交的数据是否为空.
+
+from app import photos
 from app.models import User
 
 
@@ -45,4 +48,9 @@ class PostForm(FlaskForm):
 
 
 class SearchForm(FlaskForm):
-    search = StringField('search', validators=[DataRequired()])
+    search = StringField('search', validators=[DataRequired(message="搜索不能为空")])
+
+class UploadForm(FlaskForm):
+    photo = FileField(validators=[
+        FileAllowed(photos, u'只能上传图片！'),
+        FileRequired(u'文件未选择！')])

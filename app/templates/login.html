@@ -42,7 +42,7 @@
                             </div>
                             <div class="form-group  col-sm-10 ">
                                 <label class="col-sm-1 control-label">网址</label>
-                                {{ form1.openid(size=30,disabled="disabled") }}<br>
+                                {{ form1.openid(size=30) }}<br>
                                 {% for error in form1.openid.errors %}
                                     <div class="alert alert-info alert-dismissable">
                                         <button type="button" class="close" data-dismiss="alert"

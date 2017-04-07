@@ -1,3 +1,4 @@
+from flask import g
 from app import db, app
 import flask_whooshalchemyplus
 
@@ -16,6 +17,7 @@ class User(db.Model):
     password = db.Column(db.String(140),nullable=False)
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime)
+    imgurl = db.Column(db.String(140))
     confirmed = db.Column(db.Boolean,nullable=False,default=False)
     confirmed_on = db.Column(db.DateTime,nullable=True)
 
@@ -67,7 +69,12 @@ class User(db.Model):
 
     # 头像
     def avatar(self):
-        return 'http://o7opur23b.bkt.clouddn.com/tuxiang.png'
+        user = User.query.filter_by(nickname=g.user.nickname).first()
+        img = user.imgurl
+        if img is None:
+            return 'http://o7opur23b.bkt.clouddn.com/tuxiang.png'
+        else:
+            return img
 
     # 查询返回所有当前用户作为关注者的 (follower, followed) 对。
     def is_following(self, user):

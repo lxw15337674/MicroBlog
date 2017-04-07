@@ -16,8 +16,7 @@ class TestCase(unittest.TestCase):
         self.app = app.test_client()
         db.create_all()
 
-    # 测试之后
-    def tearDown(self):
+    # 测试之后    def tearDown(self):
         db.session.remove()
         db.drop_all()
 

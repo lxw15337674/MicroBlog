@@ -1,11 +1,12 @@
 import os
 from flask import Flask
+from flask_uploads import UploadSet, IMAGES, configure_uploads, patch_request_class
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_openid import OpenID
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
-from config import basedir, ADMINS, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD
+from config import basedir, ADMINS, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, imgurl
 
 app = Flask(__name__)
 app.config.from_object('config')  # 读取配置文件
@@ -49,5 +50,11 @@ if not app.debug:
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
     app.logger.info('microblog startup')
+
+#图片上传
+app.config['UPLOADED_PHOTOS_DEST'] = imgurl #图片上传位置
+photos = UploadSet('photos', IMAGES) #图片上传格式
+configure_uploads(app, photos)
+patch_request_class(app)    #设置图片最大空间,默认16MB
 
 from app import views, models

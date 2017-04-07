@@ -1,52 +1,59 @@
 {% extends "base.html" %}
 
 {% block content %}
-        <div style="width: auto;margin:auto 80px;color: #3777c8;"  >
+    <div style="width: auto;margin:auto 80px;color: #3777c8;">
 
-    {% include 'flash.html' %}
-    <div class="well" style="">
-        <table>
-            <tr valign="top">
-                <td>
-                    <img src="{{ user.avatar() }}"><font size="6px"> {{ user.nickname }}</font>
-                    {% if user.about_me %}<p>{{ user.about_me }}</p>{% else %}<p>这个人很懒,什么都没留下</p>{% endif %}
-                    {% if user.last_seen %}<p>
-                        最后一次登录:{{ user.last_seen }}
-                    </p>{% endif %}
-                    <p>
-                        <a href="#" class="btn btn-default  disabled"
-                           role="button"><strong>{{ user.followers.count() }} 关注</strong></a>
-                        {% if user.id == g.user.id %}
-                            <a href="{{ url_for('edit') }}" class="btn btn-primary " role="button">编辑你的资料</a>
-                        {% elif not g.user.is_following(user) %}
-                            <a href="{{ url_for('follow', nickname = user.nickname) }}" class="btn btn-primary btn-lg"
-                               role="button">关注</a>
-                        {% else %}
-                            <a href="{{ url_for('unfollow', nickname = user.nickname) }}" class="btn btn-primary btn-lg"
-                               role="button">取消关注</a>
-                        {% endif %}
-                    </p>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <hr>
-    {% for post in posts.items %}
-        {% include 'post.html' %}
-    {% endfor %}
-    <ul class="pagination">
-        {% if posts.has_prev %}
-            <li class="previous"><a href="{{ url_for('user', nickname = user.nickname, page = posts.prev_num) }}">&larr;前一页</a>
-            </li>
-        {% else %}
-            <li class="previous disabled"><a href="#">&larr; 前一页</a></li>
-        {% endif %}
-        {% if posts.has_next %}
-            <li class="next"><a
-                    href="{{ url_for('user', nickname = user.nickname, page = posts.next_num) }}">后一页 &rarr;</a></li>
-        {% else %}
-            <li class="next disabled"><a href="#"> 后一页 &rarr;</a></li>
-        {% endif %}
-    </ul>
+        {% include 'flash.html' %}
+        <div class="well" style="">
+            <table>
+                <tr valign="top">
+                    <td>
+                        <img src="{{ user.avatar() }}" width="88" height="88" class="img-rounded"><font
+                            size="6px"> {{ user.nickname }}</font>
+                        {% if user.about_me %}<p>{{ user.about_me }}</p>{% else %}<p>这个人很懒,什么都没留下</p>{% endif %}
+                        {% if user.last_seen %}<p>
+                            最后一次登录:{{ user.last_seen }}
+                        </p>{% endif %}
+                        <p>
+
+                            <a href="#" class="btn btn-default  disabled"
+                               role="button"><strong>{{ user.followers.count() }} 关注</strong></a>
+                            {% if user.id == g.user.id %}
+                                <a href="{{ url_for('edit') }}" class="btn btn-primary " role="button">编辑你的资料</a>
+                                <a href="{{ url_for('upload_file') }}" class="btn btn-primary " role="button">更改头像</a>
+                            {% elif not g.user.is_following(user) %}
+                                <a href="{{ url_for('follow', nickname = user.nickname) }}"
+                                   class="btn btn-primary btn-lg"
+                                   role="button">关注</a>
+                            {% else %}
+                                <a href="{{ url_for('unfollow', nickname = user.nickname) }}"
+                                   class="btn btn-primary btn-lg"
+                                   role="button">取消关注</a>
+                            {% endif %}
+                        </p>
+                    </td>
+                </tr>
+            </table>
         </div>
+        <hr>
+        {% for post in posts.items %}
+            {% include 'post.html' %}
+        {% endfor %}
+        <ul class="pagination">
+            {% if posts.has_prev %}
+                <li class="previous"><a
+                        href="{{ url_for('user', nickname = user.nickname, page = posts.prev_num) }}">&larr;前一页</a>
+                </li>
+            {% else %}
+                <li class="previous disabled"><a href="#">&larr; 前一页</a></li>
+            {% endif %}
+            {% if posts.has_next %}
+                <li class="next"><a
+                        href="{{ url_for('user', nickname = user.nickname, page = posts.next_num) }}">后一页 &rarr;</a>
+                </li>
+            {% else %}
+                <li class="next disabled"><a href="#"> 后一页 &rarr;</a></li>
+            {% endif %}
+        </ul>
+    </div>
 {% endblock %}
