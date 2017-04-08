@@ -18,13 +18,14 @@ mail = Mail(app)
 
 # 数据库
 db = SQLAlchemy(app)
-SQLALCHEMY_TRACK_MODIFICATIONS = True
+
 
 # 用户登录
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 oid = OpenID(app, os.path.join(basedir, 'tmp'))
+lm.login_message = u"请先登录"
 
 # 通过电子邮件发送错误
 if not app.debug:

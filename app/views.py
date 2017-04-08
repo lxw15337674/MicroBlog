@@ -52,7 +52,8 @@ def login():
             flash('密码错误')
         else:
             login_user(user)
-            return redirect(url_for("/index"), flash("登陆成功"))
+            flash("登陆成功")
+            return redirect(url_for("/index"))
     return render_template('login.html',
                            title='Sign In',
                            form1=form1,

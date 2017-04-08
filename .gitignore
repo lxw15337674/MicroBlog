@@ -21,5 +21,7 @@ build
 
 #venv
 venv
-
 __pycache__
+
+photo
+
