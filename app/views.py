@@ -85,8 +85,6 @@ def register():
         flash('注册成功.')
         return redirect(url_for('register'))
     else:
-        # form.email.data = g.user.email
-        # form.nickname.data = g.user.nickname
         return render_template('register.html', form=form)
 
 

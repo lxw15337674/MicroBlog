@@ -1,22 +1,25 @@
 {% extends "base.html" %}
+
+
 {% block content %}
+    <script type="text/javascript">
+        function set_openid(openid, pr) {
+            u = openid.search('<username>')
+            if (u != -1) {
+                // openid requires username
+                user = prompt('Enter your ' + pr + ' username:')
+                openid = openid.substr(0, u) + user
+            }
+            form = document.forms['login'];
+            form.elements['openid'].value = openid
+        }
+    </script>
+
     <div style="width: auto;margin:auto 80px;color: #3777c8;">
-
         <div class="well">
-
-            <script type="text/javascript">
-                function set_openid(openid, pr) {
-                    u = openid.search('<username>')
-                    if (u != -1) {
-                        // openid requires username
-                        user = prompt('Enter your ' + pr + ' username:')
-                        openid = openid.substr(0, u) + user
-                    }
-                    form = document.forms['login'];
-                    form.elements['openid'].value = openid
-                }
-            </script>
             {% include 'flash.html' %}
+
+
             <div class="tabbable">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#panel-2" data-toggle="tab"><h5>登录</h5></a></li>
@@ -24,6 +27,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane" id="panel-1">
+
                         <form class="form-horizontal" method="post" name="login">
                             {{ form1.hidden_tag() }}{#form.hidden_tag()模板参数将被替换为一个隐藏字段，用来是实现在配置中激活的 CSRF 保护#}
                             <div class="form-group">
@@ -43,15 +47,6 @@
                             <div class="form-group  col-sm-10 ">
                                 <label class="col-sm-1 control-label">网址</label>
                                 {{ form1.openid(size=30) }}<br>
-                                {% for error in form1.openid.errors %}
-                                    <div class="alert alert-info alert-dismissable">
-                                        <button type="button" class="close" data-dismiss="alert"
-                                                aria-hidden="true">
-                                            &times;
-                                        </button>
-                                        <strong>{{ error }}</strong>
-                                    </div>
-                                {% endfor %}
                             </div>
                             <div class="form-group ">
                                 <div class="col-sm-offset-1 col-sm-10">
@@ -68,6 +63,11 @@
                                 </div>
                             </div>
                         </form>
+                        {% for error in form1.openid.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                <b>错误:</b> {{ error }}
+                            </div>
+                        {% endfor %}
                     </div>
 
 
@@ -102,6 +102,16 @@
                             </div>
 
                         </form>
+                        {% for error in form2.email.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                <b>错误:</b> {{ error }}
+                            </div>
+                        {% endfor %}
+                        {% for error in form2.password.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                <b>错误:</b> {{ error }}
+                            </div>
+                        {% endfor %}
 
                     </div>
                 </div>

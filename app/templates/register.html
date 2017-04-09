@@ -7,43 +7,52 @@
             <div class="span12">
                 <form class="form-horizontal" method="post" name="edit">
                     {{ form.hidden_tag() }}
-                    <div class="form-group">
-                        <label class="col-sm-1 control-label">邮箱</label>
-                        <div class="col-sm-10">
+                    <div class="control-group{% if form.errors.post %} error{% endif %}">
+                        <label class="control-label" >邮箱:</label>
+                        <div class="controls">
                             {{ form.email(maxlength = 20) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastname" class="col-sm-1 control-label">密码</label>
-                        <div class="col-sm-10">
-                            {{ form.password(maxlength = 20) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastname" class="col-sm-1 control-label">再次输入密码</label>
-                        <div class="col-sm-10">
-                            {{ form.password1(maxlength = 20) }}
+                            {% for error in form.errors.email %}
+                                <span class="help-inline" style="color: red"><strong> 错误:</strong>{{ error }}</span><br>
+                            {% endfor %}
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="lastname" class="col-sm-1 control-label ">昵称</label>
-                        <div class="col-sm-10">
-                            {{ form.nickname(maxlength = 20, class = "") }}
+                    <div class="control-group{% if form.errors.post %} error{% endif %}">
+                        <label class="control-label" >密码:</label>
+                        <div class="controls">
+                            {{ form.password(maxlength = 20) }}
+                            {% for error in form.errors.password %}
+                                <span class="help-inline" style="color: red"><strong> 错误:</strong>{{ error }}</span><br>
+                            {% endfor %}
                         </div>
                     </div>
+
+                   <div class="control-group{% if form.errors.post %} error{% endif %}">
+                        <label class="control-label" >再次输入密码:</label>
+                        <div class="controls">
+                            {{ form.password1(maxlength = 20) }}
+                            {% for error in form.errors.password1 %}
+                                <span class="help-inline" style="color: red"><strong> 错误:</strong>{{ error }}</span><br>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="control-group{% if form.errors.post %} error{% endif %}">
+                        <label class="control-label" >昵称:</label>
+                        <div class="controls">
+                            {{ form.nickname(maxlength = 20) }}
+                            {% for error in form.errors.nickname %}
+                                <span class="help-inline" style="color: red"><strong> 错误:</strong>{{ error }}</span><br>
+                            {% endfor %}
+                        </div>
+                    </div>
+
                     <div class="form-group ">
-                        <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class=" btn btn-default">提交</button>
+                        <div class="col-sm-offset-1 col-sm-10">
+                            <button type="submit" class=" btn btn-default">提交</button>
+                        </div>
                     </div>
-                    </div>
-                    <div class="form-group">
-                        {% for error in form.errors %}
-                            <div class="alert alert-danger" role="alert">
-                                <b>错误:</b> {{ error }}
-                            </div>
-                        {% endfor %}
-                    </div>
+
 
 
                 </form>
