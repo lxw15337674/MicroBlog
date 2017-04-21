@@ -20,10 +20,6 @@ def index(page=1):
         db.session.commit()
         flash("你的消息已发布")
         return redirect(url_for('index'))
-    # paginate 方法能够被任何查询调用。它接受三个参数:
-    #     页数，从 1 开始，
-    #     每一页的项目数，这里也就是说每一页显示的 blog 数，
-    #     错误标志。如果是 True，当请求的范围页超出范围的话，一个 404 错误将会自动地返回到客户端的网页浏览器。如果是 False，返回一个空列表而不是错误。
     posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
     return render_template("index.html",
                            title='Home',
@@ -120,7 +116,6 @@ def follow(nickname):
     flash('成功关注' + nickname + '!')
     follower_notification(user, g.user)
     return redirect(url_for('user', nickname=nickname))
-
 
 # 取消关注页面
 @app.route('/unfollow/<nickname>')
