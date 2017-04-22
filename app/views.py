@@ -27,6 +27,29 @@ def index(page=1):
                            posts=posts)
 
 
+# 粉丝列表
+@app.route('/followed_list')
+@login_required
+def followed_list():
+    list = g.user.followed_list()
+    return render_template("followers_list.html",
+                           title="粉丝列表",
+                           list=list)
+
+
+# 关注列表
+@app.route('/follower_list')
+@login_required
+def follower_list():
+    list = g.user.follower_list()
+    for a in list:
+        print(a.nickname)
+
+    return render_template("followers_list.html",
+                           title="关注列表",
+                           list=list)
+
+
 # 登录页面
 @app.route('/login', methods=['GET', 'POST'])
 @oid.loginhandler  # 告诉Flask_openid这是登录视图函数
@@ -49,7 +72,7 @@ def login():
         else:
             login_user(user)
             flash("登陆成功")
-            return redirect(url_for("/index"))
+            return redirect(url_for("index"))
     return render_template('login.html',
                            title='Sign In',
                            form1=form1,
@@ -117,6 +140,7 @@ def follow(nickname):
     follower_notification(user, g.user)
     return redirect(url_for('user', nickname=nickname))
 
+
 # 取消关注页面
 @app.route('/unfollow/<nickname>')
 @login_required
@@ -165,7 +189,6 @@ def upload_file():
         db.session.add(g.user)
         db.session.commit()
         flash('修改成功.')
-
     else:
         file_url = None
     return render_template('img.html', form=form, file_url=file_url)
@@ -211,8 +234,8 @@ def after_login(resp):
         nickname = User.make_unique_nickname(nickname)
         user = User(nickname=nickname, email=resp.email, confirmed=True, password=nickname)
         db.session.add(user)
-        # make the user follow him/herself
-        db.session.add(user.follow(user))
+        # # 首先关注自己
+        # db.session.add(user.follow(user))
         db.session.commit()
     remember_me = False
     if 'remember_me' in session:

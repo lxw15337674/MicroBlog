@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="width: auto;margin:auto 80px;color: #3777c8;">
+
+        <div class="well">
+            <h1>{% if title!= None %}{{ title }}:{% else %}列表:{% endif %}</h1>
+            {% include 'flash.html' %}
+
+            {% for user in list %}
+                <div style=" color:black">
+                    <table class="table table-bordered" style="width: auto">
+                        <tr class="active">
+                            <td width="70px">
+                                <a href="{{ url_for('user', nickname = user.nickname) }}">
+                                    <img src="{{ user.avatar() }}" width="77" height="77" class="img-rounded"/>
+                                </a>
+                            </td>
+                            <td>
+                                <p><a href="{{ url_for('user', nickname = user.nickname) }}">{{ user.nickname }}</a>
+                                </p>
+                                <p><strong>{{ user.about_me }}</strong></p>
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

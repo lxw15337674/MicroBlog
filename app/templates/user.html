@@ -16,8 +16,12 @@
                         </p>{% endif %}
                         <p>
 
-                            <a href="#" class="btn btn-default  disabled"
-                               role="button"><strong>{{ user.followers.count() }} 关注</strong></a>
+                            <a href="{{ url_for('followed_list') }}" class="btn btn-default "
+                               role="button"><strong>{{ user.followed_num() }} 粉丝</strong></a>
+
+                            <a href="{{ url_for('follower_list') }}" class="btn btn-default "
+                               role="button"><strong>{{ user.follower_num() }} 关注</strong></a>
+
                             {% if user.id == g.user.id %}
                                 <a href="{{ url_for('edit') }}" class="btn btn-primary " role="button">编辑你的资料</a>
                                 <a href="{{ url_for('upload_file') }}" class="btn btn-primary " role="button">更改头像</a>

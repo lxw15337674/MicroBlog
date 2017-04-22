@@ -1,4 +1,4 @@
-from flask import g
+
 from app import db, app
 import flask_whooshalchemyplus
 
@@ -14,19 +14,18 @@ class User(db.Model):
     nickname = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
-    password = db.Column(db.String(140),nullable=False)
+    password = db.Column(db.String(140), nullable=False)
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime)
     imgurl = db.Column(db.String(140))
-    confirmed = db.Column(db.Boolean,nullable=False,default=False)
-    confirmed_on = db.Column(db.DateTime,nullable=True)
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
+    confirmed_on = db.Column(db.DateTime, nullable=True)
 
-
-    #注册
-    def __init__(self,nickname,password,email,confirmed,confirmed_on=None):
+    # 注册
+    def __init__(self, nickname, password, email, confirmed, confirmed_on=None):
         self.nickname = nickname
         self.email = email
-        self.password =password
+        self.password = password
         self.confirmed = confirmed
         self.confirmed_on = confirmed_on
 
@@ -40,7 +39,7 @@ class User(db.Model):
                                lazy='dynamic')  # 应用于常规查询。
 
     # 设置昵称,处理昵称相同的情况
-    # @staticmethod
+    @staticmethod
     def make_unique_nickname(nickname):
         if User.query.filter_by(nickname=nickname).first() is None:
             return nickname
@@ -69,7 +68,7 @@ class User(db.Model):
 
     # 头像
     def avatar(self):
-        user = User.query.filter_by(nickname=g.user.nickname).first()
+        user = User.query.filter_by(nickname=self.nickname).first()
         img = user.imgurl
         if img is None:
             return 'http://o7opur23b.bkt.clouddn.com/tuxiang.png'
@@ -92,10 +91,29 @@ class User(db.Model):
             self.followed.remove(user)
             return self
 
+    # 返回关注用户的微博
     def followed_posts(self):
         # join连接,filter过滤,order_by排序
         return Post.query.join(followers, (followers.c.followed_id == Post.user_id)).filter(
             followers.c.follower_id == self.id).order_by(Post.timestamp.desc())
+
+    # 返回关注的用户列表
+    def follower_list(self):
+        return User.query.join(followers, (followers.c.followed_id == User.id))\
+            .filter(followers.c.follower_id == self.id)
+
+    # 返回关注用户数量
+    def follower_num(self):
+        return self.follower_list().count()
+
+    # 返回粉丝列表id
+    def followed_list(self):
+        return User.query.join(followers, (followers.c.follower_id == User.id)) \
+            .filter(followers.c.followed_id == self.id)
+
+    # 返回粉丝数量
+    def followed_num(self):
+        return self.followed_list().count()
 
     # 打印
     def __repr__(self):
