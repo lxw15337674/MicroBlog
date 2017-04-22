@@ -27,6 +27,7 @@ def index(page=1):
                            posts=posts)
 
 
+
 # 粉丝列表
 @app.route('/followed_list')
 @login_required
@@ -48,6 +49,16 @@ def follower_list():
     return render_template("followers_list.html",
                            title="关注列表",
                            list=list)
+
+#删除微博
+@app.route('/delete/<id>')
+@login_required
+def delete_post(id):
+    post = Post.query.filter_by(id=id).first()
+    db.session.delete(post)
+    db.session.commit()
+    flash("删除成功")
+    return redirect(url_for('index'))
 
 
 # 登录页面

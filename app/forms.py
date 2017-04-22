@@ -45,7 +45,6 @@ class EditForm(FlaskForm):
             return False
         return True
 
-
 class PostForm(FlaskForm):
     post = TextAreaField('post', validators=[DataRequired(message="发布的微博不能为空")])
 
