@@ -26,6 +26,11 @@ def index(page=1):
                            form=form,
                            posts=posts)
 
+@app.route('/hot')
+def hot():
+    posts = Post.query.filter_by().order_by(Post.timestamp.desc()).all()
+    return render_template("hot.html",
+                           posts=posts)
 
 
 # 粉丝列表
