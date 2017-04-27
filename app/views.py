@@ -48,9 +48,6 @@ def followed_list():
 @login_required
 def follower_list():
     list = g.user.follower_list()
-    for a in list:
-        print(a.nickname)
-
     return render_template("followers_list.html",
                            title="关注列表",
                            list=list)
