@@ -1,16 +1,25 @@
+{% extends "base.html" %}
 
-<title>Upload File</title>
-<h1>图片上传</h1>
-<form method="POST" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    {{ form.photo }}
-    {% for error in form.photo.errors %}
-        <span style="color: red;">{{ error }}</span>
-    {% endfor %}
-    <input class="btn btn-primary" type="submit" value="上传">
+{% block content %}
+    <div style="width: auto;margin:auto 80px;color: #3777c8;">
 
-</form>
+        <title>Upload File</title>
+        <div class="well">
+            <h1>图片上传</h1>
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                {{ form.photo }}
+                {% for error in form.photo.errors %}
+                    <span style="color: red;">{{ error }}</span>
+                {% endfor %}
+                <input class="btn btn-primary" type="submit" value="上传" style="margin-top: 30px">
 
-{% if file_url %}
-    <br><img src="{{ file_url }}">
-{% endif %}
+            </form>
+
+            {% if file_url %}
+                <h3>新头像预览：</h3>
+                <br><img src="{{ file_url }}" width="166" height="166" class="img-rounded"/>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

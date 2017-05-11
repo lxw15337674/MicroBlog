@@ -2,7 +2,7 @@
 <p><a href="{{url_for("user", nickname = follower.nickname, _external = True)}}">{{follower.nickname}}</a> 现在关注你了.</p>
 <table>
     <tr valign="top">
-        <td><img src="{{follower.avatar()}}"></td>
+        <td><img src="{{follower.avatar()}}" width="88" height="88" class="img-rounded"></td>
         <td>
             <a href="{{url_for('user', nickname = follower.nickname, _external = True)}}">{{follower.nickname}}</a><br />
             {{follower.about_me}}

@@ -27,11 +27,11 @@
                                 <a href="{{ url_for('upload_file') }}" class="btn btn-primary " role="button">更改头像</a>
                             {% elif not g.user.is_following(user) %}
                                 <a href="{{ url_for('follow', nickname = user.nickname) }}"
-                                   class="btn btn-primary btn-lg"
+                                   class="btn btn-primary "
                                    role="button">关注</a>
                             {% else %}
                                 <a href="{{ url_for('unfollow', nickname = user.nickname) }}"
-                                   class="btn btn-primary btn-lg"
+                                   class="btn btn-primary"
                                    role="button">取消关注</a>
                             {% endif %}
                         </p>
