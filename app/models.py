@@ -1,5 +1,6 @@
+from flask import g
 
-from app import db, app
+from app import db, app, date
 import flask_whooshalchemyplus
 
 # 关注表
@@ -8,18 +9,19 @@ followers = db.Table('followers',
                      db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
                      )
 
-
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    assess = db.relationship('Assess', backref='author', lazy='dynamic')
     password = db.Column(db.String(140), nullable=False)
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime)
     imgurl = db.Column(db.String(140))
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
+    admin = db.Column(db.Boolean,default=False)
 
     # 注册
     def __init__(self, nickname, password, email, confirmed, confirmed_on=None):
@@ -128,9 +130,21 @@ class Post(db.Model):
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    assess = db.relationship('Assess', backref='post', lazy='dynamic')
+    likenum = db.Column(db.Integer)
 
-    def __repr__(self):
-        return '<Post %r>' % self.body
+class Assess(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(128))
+    time = db.Column(db.DateTime)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id') )
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id') )
+
+    def __init__(self, post_id, body):
+        self.post_id = post_id
+        self.body = body
+        self.time = date.date()
+        self.user_id = g.user.id
 
 
 # 通过调用 whoosh_index 函数，初始化了全文搜索索引。

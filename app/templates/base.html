@@ -4,7 +4,7 @@
     {% if title %}
         <title>{{ title }}</title>
     {% else %}
-        <title>microblog</title>
+        <title>微博客</title>
     {% endif %}
 </head>
 
@@ -20,14 +20,20 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Microblog</a>
+                <a class="navbar-brand" href="/">微博客网站</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="{{ url_for('index') }}">首页</a></li>
                     {% if g.user.is_authenticated %}
-                        <li><a href="{{ url_for('hot') }}">热门</a></li>
-                        <li><a href="{{ url_for('user',nickname=g.user.nickname) }}">个人资料</a></li>
+                        {% if g.user.admin ==1 %}
+                            <li><a href="{{ url_for('admin') }} ">管理用户</a></li>
+                            <li><a href="{{ url_for('admin_post') }} ">管理微博</a></li>
+                        {% else %}
+                            <li class="active"><a href="{{ url_for('index') }}">首页</a></li>
+                            <li><a href="{{ url_for('hot') }}">热门</a></li>
+                            <li><a href="{{ url_for('user',nickname=g.user.nickname) }}">个人资料</a></li>
+
+                        {% endif %}
                         <li><a href="{{ url_for('logout') }}">登出</a></li>
                         <form class="navbar-form navbar-left" role="search" action="{{ url_for('search') }}"
                               method="post" name="search">

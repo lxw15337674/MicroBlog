@@ -2,8 +2,8 @@ from .date import date
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, oid, photos
-from .models import User, Post
-from .forms import LoginForm1, LoginForm2, SearchForm, EditForm, PostForm, registerForm, UploadForm
+from .models import User, Post, Assess
+from .forms import LoginForm1, LoginForm2, SearchForm, EditForm, PostForm, registerForm, UploadForm, AssessForm
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
 from .emails import follower_notification
 
@@ -15,7 +15,7 @@ from .emails import follower_notification
 def index(page=1):
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(body=form.post.data, timestamp=date(), author=g.user)
+        post = Post(body=form.post.data, timestamp=date(), author=g.user,likenum=0)
         db.session.add(post)
         db.session.commit()
         flash("你的消息已发布")
@@ -134,6 +134,16 @@ def user(nickname, page=1):
                            user=user,
                            posts=posts)
 
+#点赞
+@app.route('/like/<id>')
+@login_required
+def like(id):
+    post = Post.query.filter_by(id=id).first()
+    post.likenum +=1
+    db.session.add(post)
+    db.session.commit()
+    flash("点赞成功")
+    return redirect(url_for('index'))
 
 # 关注页面
 @app.route('/follow/<nickname>')
@@ -206,6 +216,47 @@ def upload_file():
         file_url = None
     return render_template('img.html', form=form, file_url=file_url)
 
+@app.route('/admin')
+@login_required
+def admin():
+    if g.user.admin:
+        flash("管理员你好")
+    else:
+        flash("不是管理员,不能进入该页面")
+        return redirect(url_for('index'))
+    alluser = User.query.filter_by().all()
+    return render_template('admin.html', alluser=alluser)
+
+@app.route('/delete/<id>')
+def delete(id):
+    post = Post.query.filter_by(id=id).first()
+    db.session.delete(post)
+    db.session.commit()
+    flash("设置管理员成功")
+    flash("删除成功")
+    return redirect('admin_post')
+
+@app.route('/admin_post')
+@login_required
+def admin_post():
+    if g.user.admin:
+        flash("管理员你好")
+    else:
+        flash("不是管理员,不能进入该页面")
+        return redirect(url_for('index'))
+    allpost = Post.query.filter_by().all()
+    return render_template('admin_post.html', allpost=allpost)
+
+@app.route('/set_admin/<id>')
+def set_admin(id):
+    user = User.query.filter_by(id=id).first()
+    user.admin = True
+    db.session.add(user)
+    db.session.commit()
+    flash("设置管理员成功")
+    return redirect('admin')
+
+
 
 # 登出
 @app.route('/logout')
@@ -266,6 +317,18 @@ def before_request():
         db.session.add(g.user)
         db.session.commit()
         g.search_form = SearchForm()
+
+@app.route('/postbody/<id>',methods=['Get','POST'])
+@login_required
+def postbody(id):
+    form = AssessForm()
+    post = Post.query.filter_by(id=id).first()
+    if form.validate_on_submit():
+        assess = Assess(body=form.assess.data,post_id=id)
+        db.session.add(assess)
+        db.session.commit()
+        flash("评论成功")
+    return render_template('postbody.html',post=post,form=form)
 
 
 @app.route('/search_results/<query>')

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style=" margin-top:50px ;padding-right:460px;padding-left:300px;">
+        <div class="well" style="padding-left: 50px;padding-right: 50px">
+            {% include 'flash.html' %}
+            <table class="table">
+                <tr>
+                    <td width="70px"><a href="{{ url_for('user', nickname = post.author.nickname) }}"><img
+                            src="{{ post.author.avatar() }}" width="88" height="88" class="img-rounded"/></a></td>
+                    <td>
+                        <p>
+                            <a href="{{ url_for('user', nickname = post.author.nickname) }}">{{ post.author.nickname }}</a>
+                        </p>
+                        <p> 发布于{{ post.timestamp }}:</p>
+                        <p><strong>{{ post.body }}</strong></p>
+                    </td>
+                </tr>
+            </table>
+            <hr>
+            <form class="form-horizontal" action="" method="post" name="post">
+                {{ form.hidden_tag() }}
+                <td>
+                    <p>{{ form.assess(cols=64,rows=2,style="resize:none") }}</p>
+                    <p><input class="btn btn-primary btn-sm" type="submit" value="评论"></p>
+                </td>
+            </form>
+            <h3>评论:</h3>
+            {% for a in post.assess %}
+                <table class="table">
+                    <tr>
+                        <td width="70px"><a href="{{ url_for('user', nickname = a.author.nickname) }}">
+                            <img src="{{ a.author.avatar() }}" width="66" height="66" class="img-rounded"/></a>
+                        </td>
+                        <td>
+                            <p>
+                                <a href="{{ url_for('user', nickname = a.author.nickname) }}">{{ a.author.nickname }}</a>
+                                {{ a.time }}:
+                            </p>
+                            <p><strong>{{ a.body }}</strong></p>
+                        </td>
+                    </tr>
+                </table>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

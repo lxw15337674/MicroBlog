@@ -1,5 +1,6 @@
 <div style=" color:black">
     <table class="table table-bordered" style="width: auto">
+
         <tr class="active">
             <td width="70px"><a href="{{ url_for('user', nickname = post.author.nickname) }}"><img
                     src="{{ post.author.avatar() }}" width="88" height="88" class="img-rounded"/></a></td>
@@ -7,11 +8,12 @@
                 <p><a href="{{ url_for('user', nickname = post.author.nickname) }}">{{ post.author.nickname }}</a>
                     发布于{{ post.timestamp }}:</p>
                 <p><strong>{{ post.body }}</strong></p>
+                <a href="{{ url_for('postbody',id=post.id) }}" class="btn btn-default btn-sm">评论</a>
+                <a href="{{ url_for('like',id=post.id )}}" class="btn btn-default btn-sm">赞 {{ post.likenum }}</a>
                 {% if post.user_id == g.user.id %}
-                <a href="{{ url_for('delete_post',id=post.id) }}" class="btn btn-danger btn-sm" role="button">删除</a>
+                    <a href="{{ url_for('delete_post',id=post.id) }}" class="btn btn-danger btn-sm" role="button">删除</a>
                 {% endif %}
             </td>
         </tr>
-
     </table>
 </div>

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="page-header" style="padding-left: 400px;padding-right: 400px">
+                {% include 'flash.html' %}
+
+        <table class="table">
+            <caption><h3>用户信息</h3></caption>
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>昵称</th>
+                <td width="100px">邮箱</th>
+                <th>是否认证</th>
+                <th>最后登录时间</th>
+                <th>是否为管理员</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in alluser %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.nickname }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.confirmed }}</td>
+                    <td>{{ user.last_seen }}</td>
+                    <td>{{ user.admin }}</td>
+                    <td><a class="btn btn-default btn-sm" href="#">禁止用户</a>
+                        <a class="btn btn-default btn-sm" href="{{ url_for('set_admin',id=user.id) }}">设为管理员</a>
+                        <a class="btn btn-default btn-sm" href="{{  url_for('user',nickname=user.nickname)}}">查看用户</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

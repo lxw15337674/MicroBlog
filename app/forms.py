@@ -48,6 +48,9 @@ class EditForm(FlaskForm):
 class PostForm(FlaskForm):
     post = TextAreaField('post', validators=[DataRequired(message="发布的微博不能为空")])
 
+class AssessForm(FlaskForm):
+    assess = TextAreaField('body', validators=[DataRequired(message="评论不能为空")])
+
 
 class SearchForm(FlaskForm):
     search = StringField('search', validators=[DataRequired(message="搜索不能为空")])

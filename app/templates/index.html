@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div style="width: auto;margin:auto 80px;color: #3777c8;">
-        <div class="well">
+    <div style="width: auto;margin:auto 80px;color: #3777c8;" style="padding-left: 800px;padding-right: 800px">
+        <div class="well" style="padding-left: 50px;padding-right: 50px">
             {% include 'flash.html' %}
-            <h1>Hi, {{ g.user.nickname }}!</h1>
+            <div style="padding-left: 100px"><img src="{{ g.user.avatar() }}" width="88" height="88" class="img-rounded"/><h3>{{ g.user.nickname }}</h3></div>
             <form class="form-horizontal" action="" method="post" name="post">
-
                 {{ form.hidden_tag() }}
                 <td>
                     <div class="control-group{% if form.errors.post %} error{% endif %}">
@@ -20,12 +19,12 @@
                         {% endfor %}
                         </p>
                     </div>
-                    <p><input class="btn btn-primary btn-sm" type="submit" value="发布!"></p>
+                    <p style="padding-left: 30px"><input class="btn btn-primary btn-sm" type="submit" value="发布!" ></p>
                 </td>
                 </td>
             </form>
         </div>
-    <hr>
+        <hr>
         {% if posts != None %}
             {% for post in posts.items %}
                 {% include 'post.html' %}
